@@ -8,8 +8,8 @@ The repository has no code, and the spec (`docs/specs/payment-authorization.md`)
 ## Decision
 Chose Java 25, Spring Boot and the Gradle wrapper with the Kotlin DSL (`build.gradle.kts`) over TypeScript with Fastify and Python with FastAPI, because Spring covers HTTP, JDBC, scheduling and testing without extra libraries, and the engineer chose the Gradle wrapper over the Maven wrapper.
 
-- Unit tests: JUnit 5 in `src/test/java`, without a Spring context. Run with `./gradlew test`.
-- Integration tests: a separate `integrationTest` suite (Gradle JVM Test Suite plugin) in `src/integrationTest/java`, which `check` runs. Each test class starts the full application with `@SpringBootTest` and `@AutoConfigureMockMvc` (no network port) against a fresh SQLite file in a JUnit `@TempDir`, set through `@DynamicPropertySource`. Requests go through `MockMvc`, asserted with `jsonPath` and AssertJ; asynchronous status changes are awaited with Awaitility; tests that depend on today's date replace the UTC `Clock` bean. Run with `./gradlew integrationTest`.
+- Unit tests: JUnit 5 in `src/test/java/com/example/gateway/unit`, without a Spring context. Run with `./gradlew test`.
+- Integration tests: a separate `integrationTest` suite (Gradle JVM Test Suite plugin) in `src/test/java/com/example/gateway/integration`, which `check` runs. Each test class starts the full application with `@SpringBootTest` and `@AutoConfigureMockMvc` (no network port) against a fresh SQLite file in a JUnit `@TempDir`, set through `@DynamicPropertySource`. Requests go through `MockMvc`, asserted with `jsonPath` and AssertJ; asynchronous status changes are awaited with Awaitility; tests that depend on today's date replace the UTC `Clock` bean. Run with `./gradlew integrationTest`.
 - Build check: `./gradlew build` compiles with `-Xlint:all -Werror`, runs both suites and builds the executable jar with `bootJar`.
 - On Windows PowerShell, use `.\gradlew.bat` instead of `./gradlew`.
 

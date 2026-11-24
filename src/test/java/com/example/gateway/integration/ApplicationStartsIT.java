@@ -1,4 +1,4 @@
-package com.example.gateway;
+package com.example.gateway.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

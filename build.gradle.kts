@@ -23,35 +23,30 @@ dependencies {
 	implementation("org.xerial:sqlite-jdbc:3.54.1.0")
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-jdbc-test")
+	testImplementation("org.awaitility:awaitility")
 }
 
-testing {
-	suites {
-		val test by getting(JvmTestSuite::class)
-
-		register<JvmTestSuite>("integrationTest") {
-			dependencies {
-				implementation(project())
-				implementation("org.springframework.boot:spring-boot-starter-jdbc")
-				implementation("org.springframework.boot:spring-boot-starter-webmvc")
-				implementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-				implementation("org.springframework.boot:spring-boot-starter-jdbc-test")
-				implementation("org.awaitility:awaitility")
-				runtimeOnly("org.junit.platform:junit-platform-launcher")
-			}
-			targets.all {
-				testTask.configure { shouldRunAfter(test) }
-			}
-		}
-	}
-}
-
-tasks.withType<Test> {
+// Unit tests live in the `unit` package and run without Spring; integration tests live in the `integration` package under
+// src/test/java and run by `integrationTest`.
+tasks.test {
 	useJUnitPlatform()
+	include("**/unit/**")
+}
+
+val integrationTest = tasks.register<Test>("integrationTest") {
+	description = "Runs the integration tests (the integration package)."
+	group = "verification"
+	useJUnitPlatform()
+	testClassesDirs = sourceSets.test.get().output.classesDirs
+	classpath = sourceSets.test.get().runtimeClasspath
+	include("**/integration/**")
+	shouldRunAfter(tasks.test)
 }
 
 tasks.named("check") {
-	dependsOn(testing.suites.named("integrationTest"))
+	dependsOn(integrationTest)
 }
 
 tasks.withType<JavaCompile> {

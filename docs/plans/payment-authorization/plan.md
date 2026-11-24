@@ -66,7 +66,7 @@ Spec items are linked by ID from `docs/specs/payment-authorization.md`. These it
 - **Commit:** `feat: retrieve a payment by ID`
 
 ### S04: Reject invalid payments
-- **Status:** `NOT STARTED`
+- **Status:** `DONE`
 - **Covers:** FR-004, BR-008, BR-011 (invalid part), BR-012; AC-003, AC-017
 - **Depends on:** S02
 - **Branch:** `feat/payment-authorization-s04-reject-invalid`

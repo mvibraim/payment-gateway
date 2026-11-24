@@ -14,4 +14,9 @@ class ApiExceptionHandler {
 	ResponseEntity<Map<String, String>> missingMerchant() {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "missing_merchant_id"));
 	}
+
+	@ExceptionHandler(PaymentNotFoundException.class)
+	ResponseEntity<Map<String, String>> notFound() {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "not_found"));
+	}
 }

@@ -23,6 +23,34 @@ The database file path is `gateway.db.path` (default `data/payment-gateway.db`);
 
 | Command | What it runs |
 |---|---|
-| `./gradlew test` | Unit tests (`src/test/java`), without Spring |
-| `./gradlew integrationTest` | Integration tests (`src/integrationTest/java`): full application on a SQLite file in a temporary folder |
+| `./gradlew test` | Unit tests (`src/test/java/com/example/gateway/unit`), without Spring |
+| `./gradlew integrationTest` | Integration tests (`src/test/java/com/example/gateway/integration`): full application on a SQLite file in a temporary folder |
 | `./gradlew build` | Compiles with `-Xlint:all -Werror`, runs both suites and builds the jar |
+
+## API
+
+### Submit a payment: `POST /payments`
+
+Headers: `X-Merchant-Id` (required; a missing or blank value returns `400 {"error": "missing_merchant_id"}`) and `Content-Type: application/json`.
+
+```json
+{"cardNumber": "4242424242424240", "expiryMonth": 12, "expiryYear": 2030, "cvv": "123", "amount": 5000, "currency": "USD"}
+```
+
+`amount` is a whole number in the currency's smallest unit (5000 = USD 50.00). The payment is sent to the simulated bank, recorded, and returned with `201`:
+
+```json
+{"id": "58b7b4ef-3303-4dc2-94be-6a8873c481c3", "status": "authorized", "amount": 5000, "currency": "USD",
+ "card": {"last4": "4240", "expiryMonth": 12, "expiryYear": 2030}}
+```
+
+`status` is `authorized` or `declined`. The full card number and CVV are never stored or returned. Validation and request keys are not enforced yet.
+
+### Simulated bank
+
+The bank runs inside the gateway and picks its answer from the card number's last digit:
+
+| Last digit | Outcome |
+|---|---|
+| 1 | Declined |
+| any other | Authorized |

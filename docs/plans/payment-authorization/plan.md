@@ -9,8 +9,8 @@ Sources: `docs/specs/payment-authorization.md`
 
 ## Test commands
 All are created by S01. Run them from the repository root; in PowerShell use `.\gradlew.bat` instead of `./gradlew`.
-- Unit: `./gradlew test` (created by S01): JUnit 5 tests in `src/test/java`, without Spring.
-- Integration: `./gradlew integrationTest` (created by S01): `src/integrationTest/java`, full application through MockMvc against a SQLite file in `@TempDir` (ADR-0001).
+- Unit: `./gradlew test` (created by S01): JUnit 5 tests in `src/test/java/com/example/gateway/unit`, without Spring.
+- Integration: `./gradlew integrationTest` (created by S01): `src/test/java/com/example/gateway/integration`, full application through MockMvc against a SQLite file in `@TempDir` (ADR-0001).
 - Build / lint: `./gradlew build` (created by S01): compiles with `-Xlint:all -Werror`, runs both suites and builds the jar.
 
 ## Requirements
@@ -48,7 +48,7 @@ Spec items are linked by ID from `docs/specs/payment-authorization.md`. These it
 - **Commit:** `build: set up Spring Boot project with SQLite and test suites`
 
 ### S02: Submit a payment
-- **Status:** `NOT STARTED`
+- **Status:** `DONE`
 - **Covers:** FR-001, FR-002, BR-002, BR-005, BR-007, NFR-001, NFR-002; the submit half of AC-001, AC-002, AC-012
 - **Depends on:** S01
 - **Branch:** `feat/payment-authorization-s02-submit-payment`

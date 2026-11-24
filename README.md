@@ -44,7 +44,25 @@ Headers: `X-Merchant-Id` (required; a missing or blank value returns `400 {"erro
  "card": {"last4": "4240", "expiryMonth": 12, "expiryYear": 2030}}
 ```
 
-`status` is `authorized` or `declined`. The full card number and CVV are never stored or returned. Validation and request keys are not enforced yet.
+`status` is `authorized` or `declined`. The full card number and CVV are never stored or returned. Request keys are not enforced yet.
+
+#### Validation
+
+A payment is valid only if all of these hold:
+
+- `cardNumber`: present, digits only, 14 to 19 digits.
+- `expiryMonth` 1 to 12 and `expiryYear` present; the card is valid through the last day of its expiry month, judged in UTC (a card expiring 11/2026 is accepted on 2026-11-23, one expiring 10/2026 is not).
+- `cvv`: 3 or 4 digits (a string).
+- `amount`: a positive whole number (no fractions).
+- `currency`: `USD`, `EUR` or `GBP`.
+
+An invalid payment is not sent to the bank and not recorded. Every failure is reported together with `422`:
+
+```json
+{"errors": [{"field": "expiry", "message": "must not be in the past"}, {"field": "currency", "message": "must be one of USD, EUR, GBP"}]}
+```
+
+Missing fields are reported as `is required`. Malformed JSON or a wrongly typed value (for example a string `amount`) returns a single error with `field` `body`.
 
 ### Retrieve a payment: `GET /payments/{id}`
 

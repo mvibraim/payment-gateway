@@ -1,5 +1,6 @@
 package com.example.gateway;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 class PaymentController {
 
 	private final PaymentService service;
+	private final PaymentValidator validator;
 
-	PaymentController(PaymentService service) {
+	PaymentController(PaymentService service, PaymentValidator validator) {
 		this.service = service;
+		this.validator = validator;
 	}
 
 	@PostMapping("/payments")
 	ResponseEntity<Payment> submit(@RequestHeader(value = "X-Merchant-Id", required = false) String merchantId,
 			@RequestBody PaymentRequest request) {
 		requireMerchant(merchantId);
+		List<FieldError> errors = validator.validate(request);
+		if (!errors.isEmpty()) {
+			throw new ValidationException(errors);
+		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.submit(merchantId, request));
 	}
 

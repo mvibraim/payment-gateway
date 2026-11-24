@@ -1,5 +1,6 @@
 package com.example.gateway;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +24,9 @@ class PaymentService {
 				new Payment.Card(number.substring(number.length() - 4), request.expiryMonth(), request.expiryYear()));
 		payments.insert(payment, merchantId);
 		return payment;
+	}
+
+	Optional<Payment> find(String merchantId, UUID id) {
+		return payments.find(merchantId, id);
 	}
 }

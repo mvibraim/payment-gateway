@@ -46,6 +46,12 @@ Headers: `X-Merchant-Id` (required; a missing or blank value returns `400 {"erro
 
 `status` is `authorized` or `declined`. The full card number and CVV are never stored or returned. Validation and request keys are not enforced yet.
 
+### Retrieve a payment: `GET /payments/{id}`
+
+Header: `X-Merchant-Id` (required, as above). Returns `200` with the payment JSON shown above: its current `status`, amount, currency and the card's last four digits and expiry. The full card number and CVV are never returned.
+
+`404 {"error": "not_found"}` is returned for an unknown ID, a malformed ID, or a payment that belongs to another merchant.
+
 ### Simulated bank
 
 The bank runs inside the gateway and picks its answer from the card number's last digit:

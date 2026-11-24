@@ -57,7 +57,7 @@ Spec items are linked by ID from `docs/specs/payment-authorization.md`. These it
 - **Commit:** `feat: submit payments to the simulated bank`
 
 ### S03: Retrieve a payment
-- **Status:** `NOT STARTED`
+- **Status:** `READY FOR HUMAN REVIEW`
 - **Covers:** FR-003, BR-003, BR-004, BR-005; AC-001, AC-002, AC-012, AC-013
 - **Depends on:** S02
 - **Branch:** `feat/payment-authorization-s03-retrieve-payment`

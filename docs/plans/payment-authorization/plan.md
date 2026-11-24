@@ -39,7 +39,7 @@ Spec items are linked by ID from `docs/specs/payment-authorization.md`. These it
 
 ## Tasks
 ### S01: Project setup
-- **Status:** `NOT STARTED`
+- **Status:** `DONE`
 - **Covers:** none (setup task; creates the test commands)
 - **Depends on:** none
 - **Branch:** `build/payment-authorization-project-setup`
